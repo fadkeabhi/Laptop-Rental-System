@@ -4,12 +4,71 @@ import CartItem from "../components/CartItem";
 import { Link } from "react-router-dom";
 import Navbar from '../components/Navbar';
 
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../utils/firebaseConfig"
+import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
+
+const app = initializeApp(firebaseConfig);
+
 const MyCart = () => {
   const { cart } = useSelector((state) => state);
   const [totalAmount, setTotalAmount] = useState(0);
 
+
+  function openGoogleMaps(latitude,longitude) {
+
+
+    // Construct the Google Maps URL with the coordinates
+    const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+    // Open the URL in a new tab
+    window.open(mapsUrl, '_blank');
+  }
+
+
+
+  const fetchDataAsJson = async (uid) => {
+    const firestore = getFirestore(app);
+    const collectionRef = collection(firestore, "users");
+
+    try {
+      const q = query(collectionRef, where('uid', '==', uid));
+
+      const querySnapshot = await getDocs(q);
+
+      const data = [];
+
+      querySnapshot.forEach((doc) => {
+        data.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    console.log(cart[0].by)
+
+    // get details of shop
+    const shopDetails = await fetchDataAsJson(cart[0].by)
+    console.log(shopDetails)
+    openGoogleMaps(shopDetails[0].lat,shopDetails[0].log)
+
+
+  }
+
   useEffect(() => {
-    setTotalAmount(cart.reduce((acc, curr) => acc + curr.price, 0));
+    setTotalAmount(cart.reduce((acc, curr) => acc + parseFloat(curr.price), 0));
   }, [cart]);
   return (
     <div>
@@ -29,10 +88,16 @@ const MyCart = () => {
               <p style={{ fontWeight: "bold", marginTop: "20px" }}>Total Items: <span style={{ fontWeight: "normal" }}>{cart.length}</span></p>
               <div>
                 <p>Total Amount: <span style={{ fontWeight: "bold" }}>${totalAmount}</span></p>
-                <button style={{ marginTop: "20px", padding: "10px", backgroundColor: "#1f9d55", color: "white", fontWeight: "bold", borderRadius: "5px" }}>
+                <button onClick={handleClick} style={{ marginTop: "20px", padding: "10px", backgroundColor: "#1f9d55", color: "white", fontWeight: "bold", borderRadius: "5px" }}>
                   CheckOut Now
                 </button>
+
               </div>
+              <Link to="/login/Home" style={{ textDecoration: "none" }}>
+                <button style={{ backgroundColor: "#199d55", padding: "10px", borderRadius: "5px", marginTop: "20px", color: "white", fontWeight: "bold", cursor: "pointer" }}>
+                  Shop More
+                </button>
+              </Link>
             </div>
           </div>
         ) : (
