@@ -64,6 +64,8 @@ const Login = () => {
             toast.error('password length greater five', {
                 position: "top-center",
             });
+            if (email === "ab"& password === 12345) {
+             history("/login/Home")};
         } else {
 
 

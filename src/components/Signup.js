@@ -49,7 +49,6 @@ const Signup = () => {
 
     const addData = async (e) => {
         e.preventDefault();
-
         const { name, email, date, password } = inpval;
 
         if (name === "") {
@@ -152,7 +151,7 @@ const Signup = () => {
                                 Submit
                             </Button>
                         </Form>
-                        <p className='mt-3'>Already Have an Account <span><NavLink to="/login">SignIn</NavLink></span> </p>
+                        
                     </div>
                     <SIgn_img />
                 </section>

@@ -13,9 +13,6 @@ const Home = () => {
   const API_URL = "https://fakestoreapi.com/products";
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-
-
-
   const fetchDataAsJson = async () => {
     const firestore = getFirestore(app);
     const collectionRef = collection(firestore, "products");
