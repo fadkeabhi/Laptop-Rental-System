@@ -12,7 +12,7 @@ const Product = ({ item }) => {
     toast.success("items added successfully..!", {
       position: toast.POSITION.TOP_CENTER,
     });
-  };
+  }; 
 
   const removeFromCart = () => {
     dispatch(remove(item.id));

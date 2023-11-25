@@ -7,13 +7,18 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './Header';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../utils/firebaseConfig"
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+
 const Login = () => {
 
     const history = useNavigate();
 
     const [inpval, setInpval] = useState({
-        email: "",
-        password: ""
+        email: "ab@cd.efg",
+        password: "12345678"
     })
 
     const [data, setData] = useState([]);
@@ -61,33 +66,38 @@ const Login = () => {
             });
         } else {
 
-            if (getuserArr && getuserArr.length) {
-                const userdata = JSON.parse(getuserArr);
-                const userlogin = userdata.filter((el, k) => {
-                    return el.email === email && el.password === password
-                });
 
-                if (userlogin.length === 0) {
-                    alert("invalid details")
-                } else {
-                    console.log("user login succesfulyy");
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            // Initialize Firebase Authentication and get a reference to the service
+            const auth = getAuth(app);
 
-                    localStorage.setItem("user_login", JSON.stringify(userlogin))
+            // Sign in the user with email and password
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log(userCredential.user.email);
 
+                    // Check user role
+                    const firestore = getFirestore(app);
                     history("/login/Home")
-                }
-            }
+
+                })
+                .catch((e) => {
+                    console.log("Error" + e);
+
+                })
+
         }
 
     }
 
     return (
-        <><Header/>
+        <><Header />
             <div className="container mt-3">
                 <section className='d-flex justify-content-between'>
                     <div className="left_data mt-3 p-3" style={{ width: "100%" }}>
                         <h3 className='text-center col-lg-6'>Sign IN</h3>
-                          <Form >
+                        <Form >
 
                             <Form.Group className="mb-3 col-lg-6" controlId="formBasicEmail">
 
@@ -101,7 +111,7 @@ const Login = () => {
                             <NavLink to="/login/Home"> <Button variant="primary" className='col-lg-6' onClick={addData} style={{ background: "rgb(67, 185, 127)" }} type="submit">
                                 Submit
                             </Button> </NavLink>
-                        </Form> 
+                        </Form>
                         <p className='mt-3'> </p>
                     </div>
                     <SIgn_img />

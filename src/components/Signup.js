@@ -7,6 +7,13 @@ import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './Header';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth ,createUserWithEmailAndPassword} from "firebase/auth";
+import {firebaseConfig} from "../utils/firebaseConfig"
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+
+
 const Signup = () => {
 
     const history = useNavigate();
@@ -18,9 +25,9 @@ const Signup = () => {
         password: ""
     })
 
-   
 
-    const [data,setData] = useState([]);
+
+    const [data, setData] = useState([]);
     console.log(inpval);
 
     const getdata = (e) => {
@@ -40,46 +47,85 @@ const Signup = () => {
 
     }
 
-    const addData = (e) => {
+    const addData = async (e) => {
         e.preventDefault();
 
         const { name, email, date, password } = inpval;
 
         if (name === "") {
-            toast.error(' name field is requred!',{
+            toast.error(' name field is requred!', {
                 position: "top-center",
             });
         } else if (email === "") {
-             toast.error('email field is requred',{
+            toast.error('email field is requred', {
                 position: "top-center",
             });
         } else if (!email.includes("@")) {
-             toast.error('plz enter valid email addres',{
-                position: "top-center",
-            });
-        } else if (date === "") {
-             toast.error('date field is requred',{
+            toast.error('plz enter valid email addres', {
                 position: "top-center",
             });
         } else if (password === "") {
-             toast.error('password field is requred',{
+            toast.error('password field is requred', {
                 position: "top-center",
             });
         } else if (password.length < 5) {
-             toast.error('password length greater five',{
+            toast.error('password length greater five', {
                 position: "top-center",
             });
         } else {
-            console.log("data added succesfully");
-            history("/login")
-            localStorage.setItem("useryoutube",JSON.stringify([...data,inpval]));
+            
+            // history("/login")
+            // localStorage.setItem("useryoutube", JSON.stringify([...data, inpval]));
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            // Initialize Firebase Authentication and get a reference to the service
+            const auth = getAuth(app);
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    console.log("data added succesfully");
+                    console.log(user);
+                    console.log(user.uid);
+                    
+                    try {
+                        const firestore = getFirestore(app);
+                  
+                        // Create a new document with a field
+
+                        addDoc(collection(firestore, "users"), {
+                            name: name,
+                            uid: user.uid,
+                          }).then((docRef) => {
+                            console.log("Document written with ID: ", docRef.id);
+                            history("/login")
+                          }).catch((e) => {
+                            console.log("Error: ", e);
+                          })
+                          
+                            
+                          
+                          
+                      } catch (error) {
+                        console.error('Error adding document: ', error);
+                      }
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode, errorMessage);
+                    // ..
+                });
 
         }
 
     }
 
     return (
-        <><Header/>
+        <><Header />
             <div className="container mt-3">
                 <section className='d-flex justify-content-between'>
                     <div className="left_data mt-3 p-3" style={{ width: "100%" }}>

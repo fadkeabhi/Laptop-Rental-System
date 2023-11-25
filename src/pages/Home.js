@@ -3,17 +3,59 @@ import Product from "../components/Product";
 import Spinner from "../components/Spinner";
 import Navbar from '../components/Navbar';
 
+import { initializeApp } from "firebase/app";
+import {firebaseConfig} from "../utils/firebaseConfig"
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+const app = initializeApp(firebaseConfig);
+
 const Home = () => {
   const API_URL = "https://fakestoreapi.com/products";
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
+
+  const fetchDataAsJson = async () => {
+    const firestore = getFirestore(app);
+    const collectionRef = collection(firestore, "products");
+  
+    try {
+      const querySnapshot = await getDocs(collectionRef);
+  
+      const data = [];
+  
+      querySnapshot.forEach((doc) => {
+        data.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+  
+      
+  
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
+    }
+  };
+
   async function getData() {
     setLoading(true);
     try {
       const url = await fetch(API_URL);
+      //  Work here
+      const data = await fetchDataAsJson()
+      
+      console.log(data)
+      
+      
       const output = await url.json();
-      setItems(output);
+      console.log(output)
+
+
+      setItems(data);
     } catch (error) {
       console.log(error);
     }
