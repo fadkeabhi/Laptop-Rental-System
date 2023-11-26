@@ -13,7 +13,7 @@ const app = initializeApp(firebaseConfig);
 const MyCart = () => {
   const { cart } = useSelector((state) => state);
   const [totalAmount, setTotalAmount] = useState(0);
-<<<<<<< Updated upstream
+
 
 
   function openGoogleMaps(latitude,longitude) {
@@ -68,8 +68,8 @@ const MyCart = () => {
 
   }
 
-=======
->>>>>>> Stashed changes
+
+
   useEffect(() => {
     setTotalAmount(cart.reduce((acc, curr) => acc + parseFloat(curr.price), 0));
   }, [cart]);

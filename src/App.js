@@ -7,11 +7,7 @@ import {Routes,Route} from "react-router-dom"
 import MyCart from './pages/MyCart';
 import Home from './pages/Home';
 import Admin from './components/admin';
-<<<<<<< Updated upstream
 import Additem  from './components/additem';
-=======
-
->>>>>>> Stashed changes
 function App() {
   return (
     <Routes>
@@ -21,12 +17,12 @@ function App() {
       <Route path='*' element={<Errror />} />
       <Route path="/login/Home" element={<Home />} />
         <Route path="/login/Home/mycart" element={<MyCart />} />
-<<<<<<< Updated upstream
+
         <Route path="/login/admin"  element ={ <Admin/>} />
         <Route path="/login/admin/additem"  element ={ <Additem/>} />
-=======
+
         <Route path="/login/admin" element={<Admin/>} />
->>>>>>> Stashed changes
+
     </Routes>
  
   );
