@@ -69,7 +69,6 @@ const MyCart = () => {
   }
 
 
-
   useEffect(() => {
     setTotalAmount(cart.reduce((acc, curr) => acc + parseFloat(curr.price), 0));
   }, [cart]);

@@ -10,7 +10,7 @@ import Header from './Header';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../utils/firebaseConfig"
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDocs, collection, where, query } from 'firebase/firestore';
 
 const Login = () => {
 
@@ -64,8 +64,9 @@ const Login = () => {
             toast.error('password length greater five', {
                 position: "top-center",
             });
-            if (email === "ab"& password === 12345) {
-             history("/login/Home")};
+            if (email === "ab" & password === 12345) {
+                history("/login/Home")
+            };
         } else {
 
 
@@ -78,10 +79,39 @@ const Login = () => {
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     console.log(userCredential.user.email);
+                    console.log(userCredential.user.uid);
 
                     // Check user role
                     const firestore = getFirestore(app);
-                    history("/login/Home")
+
+                    const usersCollection = collection(firestore, 'users');
+
+
+                    const q = query(usersCollection, where('uid', '==', userCredential.user.uid));
+
+
+                    getDocs(q)
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                // Access the document data using doc.data()
+                                const data = doc.data();
+                                if(data?.role == "shop"){
+                                    history("/login/admin")
+                                } else{
+                                    history("/login/Home")
+                                }
+                                console.log('Document data:', data);
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching document:', error);
+                        })
+
+
+
+
+
+                    
 
                 })
                 .catch((e) => {

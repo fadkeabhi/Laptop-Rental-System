@@ -63,12 +63,13 @@ const Navbar = () => {
     signOut(auth)
     .then(() => {
       console.log('User logged out successfully');
+      history("/login");
     })
     .catch((error) => {
       console.error('Error logging out:', error);
     });
-    localStorage.removeItem("user_login")
-    history("/login");
+    
+    
   }
 
   useEffect(() => {

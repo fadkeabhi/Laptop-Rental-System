@@ -5,7 +5,8 @@ const Admin = () => {
     return (
          <div>
             <Adminnav/>
-             <Adminitem/>
+            <Adminitem/>
+
          </div>
     );
 };
