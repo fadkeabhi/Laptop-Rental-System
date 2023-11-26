@@ -83,13 +83,8 @@ const Login = () => {
 
                     // Check user role
                     const firestore = getFirestore(app);
-
                     const usersCollection = collection(firestore, 'users');
-
-
                     const q = query(usersCollection, where('uid', '==', userCredential.user.uid));
-
-
                     getDocs(q)
                         .then((querySnapshot) => {
                             querySnapshot.forEach((doc) => {

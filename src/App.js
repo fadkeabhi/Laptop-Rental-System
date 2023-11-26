@@ -7,7 +7,7 @@ import {Routes,Route} from "react-router-dom"
 import MyCart from './pages/MyCart';
 import Home from './pages/Home';
 import Admin from './components/admin';
-
+import Location from './components/location';
 
 import Additem  from './components/additem';
 
@@ -27,6 +27,7 @@ function App() {
 
 
         <Route path="/login/admin" element={<Admin/>} />
+        <Route path="/login/admin/location" element={<Location/>} />
 
     </Routes>
  

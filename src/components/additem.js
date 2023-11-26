@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { getAuth , signOut } from 'firebase/auth';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../utils/firebaseConfig"
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { String } from "core-js";
 const Additem = ()=>{
     const { cart } = useSelector((state) => state);
   const [logindata, setLoginData] = useState([]);
@@ -96,7 +98,29 @@ const Additem = ()=>{
         toast.error('url field is must', {
             position: "top-center",
         });
+    } else{
+      // All data is valid now add it to firebase
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const firestore = getFirestore(app);
+      addDoc(collection(firestore, "users"), {
+        by: user.uid,
+        category: 'Electronics',
+        description: desc,
+        image: url,
+        price: price,
+      }).then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+        // history("/login/admin")
+      }).catch((e) => {
+        console.log("Error: ", e);
+      })
+
+
     }
+
+    
 
  }
    const addback=()=>{
@@ -119,6 +143,7 @@ const Additem = ()=>{
         </div>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+    
       <Button onClick={back}>Back</Button>
         <Button onClick={userlogout}>LogOut</Button>
       </div>
@@ -146,7 +171,7 @@ const Additem = ()=>{
 
                    <Form.Control type="url" name='url' onChange={getdata} placeholder="Enter The Url Of Image" />
                </Form.Group>
-               <Button variant="primary" className='col-lg-6' onClick={ addback} style={{ background: "rgb(67, 185, 127)" }} type="submit">
+               <Button variant="primary" className='col-lg-6' onClick={ addData } style={{ background: "rgb(67, 185, 127)" }} type="submit">
                    Add This Item 
                </Button>
            </Form>

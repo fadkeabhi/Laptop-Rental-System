@@ -73,7 +73,9 @@ const Navbar = () => {
   const additem =()=>{
     history("/login/admin/additem")
    }
-
+  const updatelocation =()=>{
+     history("/login/admin/location")
+  }
   useEffect(() => {
     Birthday();
   }, [])
@@ -92,6 +94,7 @@ const Navbar = () => {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <Button onClick={updatelocation}>Update location</Button>
         <Button onClick={additem}>Additem</Button>
           <Button onClick={userlogout}>LogOut</Button>
          
