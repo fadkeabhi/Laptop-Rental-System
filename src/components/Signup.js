@@ -24,8 +24,10 @@ const Signup = () => {
         date: "",
         password: ""
     })
-
-
+  
+   const login =()=>{
+     history("/login")
+   }
 
     const [data, setData] = useState([]);
     console.log(inpval);
