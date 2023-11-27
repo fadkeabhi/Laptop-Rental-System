@@ -13,15 +13,9 @@ const app = initializeApp(firebaseConfig);
 const MyCart = () => {
   const { cart } = useSelector((state) => state);
   const [totalAmount, setTotalAmount] = useState(0);
-
-
-
   function openGoogleMaps(latitude,longitude) {
-
-
     // Construct the Google Maps URL with the coordinates
     const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-
     // Open the URL in a new tab
     window.open(mapsUrl, '_blank');
   }
@@ -89,7 +83,7 @@ const MyCart = () => {
               <div style={{ fontSize: "2rem", color: "#1f9d55", fontWeight: "bold", textTransform: "uppercase", marginTop: "10px" }}>Summary</div>
               <p style={{ fontWeight: "bold", marginTop: "20px" }}>Total Items: <span style={{ fontWeight: "normal" }}>{cart.length}</span></p>
               <div>
-                <p>Total Amount: <span style={{ fontWeight: "bold" }}>${totalAmount}</span></p>
+                <p>Total Amount: <span style={{ fontWeight: "bold" }}>Rs{totalAmount}</span></p>
                 <button onClick={handleClick} style={{ marginTop: "20px", padding: "10px", backgroundColor: "#1f9d55", color: "white", fontWeight: "bold", borderRadius: "5px" }}>
                   CheckOut Now
                 </button>

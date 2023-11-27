@@ -25,13 +25,9 @@ const Signup = () => {
         password: ""
     })
   
-   const login =()=>{
-     history("/login")
-   }
 
-    const [data, setData] = useState([]);
+
     console.log(inpval);
-
     const getdata = (e) => {
         // console.log(e.target.value);
 
@@ -153,7 +149,7 @@ const Signup = () => {
                                 Submit
                             </Button>
                         </Form>
-                        
+                        <p className='mt-3'>Already Have an Account <span><NavLink  to="/login" class="text-decoration-none">SignIn</NavLink></span> </p>
                     </div>
                     <SIgn_img />
                 </section>
@@ -163,4 +159,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Signup;

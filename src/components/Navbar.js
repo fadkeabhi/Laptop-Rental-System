@@ -2,19 +2,15 @@ import React from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from 'react'
-import Modal from 'react-bootstrap/Modal'
+import {  useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
 import { getAuth , signOut } from 'firebase/auth';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../utils/firebaseConfig"
 
-
 const Navbar = () => {
   const { cart } = useSelector((state) => state);
-  const [logindata, setLoginData] = useState([]);
-
   const history = useNavigate();
 
   // check if user authenticated
@@ -36,29 +32,6 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
 
   var todayDate = new Date().toISOString().slice(0, 10);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const Birthday = () => {
-    const getuser = localStorage.getItem("user_login");
-    if (getuser && getuser.length) {
-      const user = JSON.parse(getuser);
-
-      setLoginData(user);
-
-      const userbirth = logindata.map((el, k) => {
-        return el.date === todayDate
-      });
-
-      if (userbirth) {
-        setTimeout(() => {
-          console.log("ok");
-          handleShow();
-        }, 3000)
-      }
-    }
-  }
-
   const userlogout = () => {
     signOut(auth)
     .then(() => {
@@ -71,10 +44,6 @@ const Navbar = () => {
     
     
   }
-
-  useEffect(() => {
-    Birthday();
-  }, [])
 
   return (
     <div style={{ background: "#333", color: "white", height: "50px", display: "flex", position: "fixed", width: "100%", top: "0", zIndex: "1000" }}>

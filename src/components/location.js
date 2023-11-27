@@ -162,7 +162,7 @@ const Location = () => {
                             </p>
                         </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
 
                         <Button onClick={back}>Back</Button>
                         <Button onClick={userlogout}>LogOut</Button>

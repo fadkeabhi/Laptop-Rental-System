@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { add, remove } from "../redux/Slices/cartSlice";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
+
 
 const Product = ({ item }) => {
   const { cart } = useSelector((state) => state);
@@ -9,14 +9,10 @@ const Product = ({ item }) => {
 
   const addToCart = () => {
     dispatch(add(item));
-    toast.success("items added successfully..!", {
-      position: toast.POSITION.TOP_CENTER,
-    });
   }; 
 
   const removeFromCart = () => {
     dispatch(remove(item.id));
-    toast.error("item removed", { position: toast.POSITION.TOP_CENTER });
   };
 
   return (
@@ -40,7 +36,7 @@ const Product = ({ item }) => {
           />
         </div>
         <div className="flex gap-14 justify-center items-center w-full absolute bottom-3">
-          <p className="text-green-700 font-bold text-sm">${item.price}</p>
+          <p className="text-green-700 font-bold text-sm">Rs{item.price}</p>
 
           {cart.some((p) => p.id === item.id) ? (
             <button

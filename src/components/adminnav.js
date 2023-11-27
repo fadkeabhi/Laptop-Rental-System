@@ -93,11 +93,10 @@ const Navbar = () => {
             </p>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
         <Button onClick={updatelocation}>Update location</Button>
         <Button onClick={additem}>Additem</Button>
           <Button onClick={userlogout}>LogOut</Button>
-         
         </div>
       </div>
     </div>

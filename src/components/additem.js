@@ -1,7 +1,4 @@
-import react from "react";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from 'react'
-
+import { useState } from 'react'
 import SIgn_img from './SIgn_img'
 import { useNavigate } from 'react-router-dom'
 import { getAuth , signOut } from 'firebase/auth';
@@ -12,9 +9,22 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { String } from "core-js";
 const Additem = () => {
   const history = useNavigate();
+  const back =()=>{
+    history("/login/admin")
+   }
+   const userlogout = () => {
+    signOut(auth)
+    .then(() => {
+      console.log('User logged out successfully');
+      history("/login");
+    })
+    .catch((error) => {
+      console.error('Error logging out:', error);
+    });
+    
+  }
 
   const [inpval, setInpval] = useState({
     itemtitle: "",
@@ -40,23 +50,32 @@ const Additem = () => {
   // Function to handle form submission
   const addData = async (e) => {
     e.preventDefault();
-
+  
     const { itemtitle, desc, price, url } = inpval;
-
+  
     if (!itemtitle || !desc || !price || !url) {
       toast.error("All fields are required!", {
         position: "top-center",
       });
       return;
     }
-
-    console.log(itemtitle)
-    console.log(desc)
-    console.log(price)
-    console.log(url)
+  
+    console.log(itemtitle);
+    console.log(desc);
+    console.log(price);
+    console.log(url);
+  
+    // Check if user is logged in
+    if (!user) {
+      toast.error("User not logged in!", {
+        position: "top-center",
+      });
+      return;
+    }
+  
     // All data is valid now add it to Firebase
     const firestore = getFirestore(app);
-
+  
     try {
       await addDoc(collection(firestore, "products"), {
         by: user.uid,
@@ -66,13 +85,14 @@ const Additem = () => {
         price: price,
         title: itemtitle,
         rate: 5,
-        count: 1
+        count: 1,
       });
-
+  
       toast.success("Item added successfully!", {
         position: toast.POSITION.TOP_CENTER,
       });
-
+  
+      // Use the navigate function to redirect to a different route
       history("/login/admin");
     } catch (error) {
       console.error("Error adding document:", error);
@@ -81,6 +101,7 @@ const Additem = () => {
       });
     }
   };
+  
     return (<><div style={{ background: "#333", color: "white", height: "50px", display: "flex", position: "fixed", width: "100%", top: "0", zIndex: "1000" }}>
     <div style={{ width: "75%", margin: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <div>
@@ -95,8 +116,8 @@ const Additem = () => {
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
     
-      {/* <Button onClick={back}>Back</Button>
-        <Button onClick={userlogout}>LogOut</Button> */}
+      <Button onClick={back}>Back</Button>
+        <Button onClick={userlogout}>LogOut</Button>
       </div>
     </div>
   </div>

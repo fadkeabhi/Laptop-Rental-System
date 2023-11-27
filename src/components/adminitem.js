@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import Product2 from "./Product2";
 import Spinner from "./Spinner";
 import { initializeApp } from "firebase/app";

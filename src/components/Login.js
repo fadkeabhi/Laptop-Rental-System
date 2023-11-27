@@ -139,7 +139,7 @@ const Login = () => {
                                 Submit
                             </Button> </NavLink>
                         </Form>
-                        <p className='mt-3'> </p>
+                        <p className='mt-3'>Create New Account<span><NavLink to="/"class="text-decoration-none" > SignUP </NavLink></span> </p>
                     </div>
                     <SIgn_img />
                 </section>

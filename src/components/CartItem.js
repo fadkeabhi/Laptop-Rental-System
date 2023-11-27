@@ -24,7 +24,7 @@ const CartItem = ({ item }) => {
             <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{item.title}</h1>
             <p style={{ fontSize: "0.8rem", opacity: "0.9" }}>{item.description}</p>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <p style={{ color: "#1f9d55", fontWeight: "bold", fontSize: "0.8rem" }}>${item.price}</p>
+              <p style={{ color: "#1f9d55", fontWeight: "bold", fontSize: "0.8rem" }}>Rs{item.price}</p>
               <button onClick={removeFromCart} style={{ padding: "10px", color: "red", fontSize: "1.5rem", backgroundColor: "#e0e0e0", borderRadius: "50%" }}>
                 <MdDelete />
               </button>
