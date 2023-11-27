@@ -1,7 +1,7 @@
 import react from "react";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from 'react'
-import Modal from 'react-bootstrap/Modal'
+
 import SIgn_img from './SIgn_img'
 import { useNavigate } from 'react-router-dom'
 import { getAuth , signOut } from 'firebase/auth';
@@ -13,123 +13,74 @@ import Button from 'react-bootstrap/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { String } from "core-js";
-const Additem = ()=>{
-    const { cart } = useSelector((state) => state);
-  const [logindata, setLoginData] = useState([]);
-
+const Additem = () => {
   const history = useNavigate();
 
-  // check if user authenticated
-  // Initialize Firebase
+  const [inpval, setInpval] = useState({
+    itemtitle: "",
+    desc: "",
+    price: "",
+    url: "",
+  });
+
+  // Firebase initialization
   const app = initializeApp(firebaseConfig);
-  // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
   const user = auth.currentUser;
-  if (user) {
-    console.log('User email:', user);
-  } else {
-    console.log('No user is currently signed in.');
-    history("/login");
-  }
-  const [show, setShow] = useState(false);
-  var todayDate = new Date().toISOString().slice(0, 10);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
-  const Birthday = () => {
-    const getuser = localStorage.getItem("user_login");
-    if (getuser && getuser.length) {
-      const user = JSON.parse(getuser);
-      setLoginData(user);
-      const userbirth = logindata.map((el, k) => {
-        return el.date === todayDate
+  // Function to handle form input changes
+  const getdata = (e) => {
+    const { value, name } = e.target;
+    setInpval((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle form submission
+  const addData = async (e) => {
+    e.preventDefault();
+
+    const { itemtitle, desc, price, url } = inpval;
+
+    if (!itemtitle || !desc || !price || !url) {
+      toast.error("All fields are required!", {
+        position: "top-center",
       });
-
-      if (userbirth) {
-        setTimeout(() => {
-          console.log("ok");
-          handleShow();
-        }, 3000)
-      }
+      return;
     }
-  }
-    const back =()=>{
-        history("/login/admin")
-       }
-    const userlogout = () => {
-        signOut(auth)
-        .then(() => {
-          console.log('User logged out successfully');
-        })
-        .catch((error) => {
-          console.error('Error logging out:', error);
-        });
-        localStorage.removeItem("user_login")
-        history("/login");
-      }  ///
-      /// firebase setup  
-      const [inpval, setInpval] = useState({
-        name: "",
-        email: "",
-        date: "",
-        password: ""
-    })
 
-      const { itemtitle, desc, url, price } = inpval;
-      //get function 
-       const getdata =(e) => {
+    console.log(itemtitle)
+    console.log(desc)
+    console.log(price)
+    console.log(url)
+    // All data is valid now add it to Firebase
+    const firestore = getFirestore(app);
 
-       }
-      //add function 
- const addData = async (e) =>{ 
-    if (itemtitle === "") {
-        toast.error(' name field is must !', {
-            position: "top-center",
-        });
-    } else if (desc === "") {
-        toast.error('Description field is must', {
-            position: "top-center",
-        });
-    } if (price === "" && isNaN(Number(price))) {
-        toast.error('Please enter a valid price', {
-          position: "top-center",
-        });
-    } else if (url === "") {
-        toast.error('url field is must', {
-            position: "top-center",
-        });
-    } else{
-      // All data is valid now add it to firebase
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const firestore = getFirestore(app);
-      addDoc(collection(firestore, "users"), {
+    try {
+      await addDoc(collection(firestore, "products"), {
         by: user.uid,
-        category: 'Electronics',
+        category: "Electronics",
         description: desc,
         image: url,
         price: price,
-      }).then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-        // history("/login/admin")
-      }).catch((e) => {
-        console.log("Error: ", e);
-      })
+        title: itemtitle,
+        rate: 5,
+        count: 1
+      });
 
-
-    }
-
-    
-
- }
-   const addback=()=>{
-     history("/login/admin")
-     toast.success("items added successfully..!", {
+      toast.success("Item added successfully!", {
         position: toast.POSITION.TOP_CENTER,
       });
-   }
- 
+
+      history("/login/admin");
+    } catch (error) {
+      console.error("Error adding document:", error);
+      toast.error("Failed to add item. Please try again.", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
     return (<><div style={{ background: "#333", color: "white", height: "50px", display: "flex", position: "fixed", width: "100%", top: "0", zIndex: "1000" }}>
     <div style={{ width: "75%", margin: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
       <div>
@@ -144,8 +95,8 @@ const Additem = ()=>{
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
     
-      <Button onClick={back}>Back</Button>
-        <Button onClick={userlogout}>LogOut</Button>
+      {/* <Button onClick={back}>Back</Button>
+        <Button onClick={userlogout}>LogOut</Button> */}
       </div>
     </div>
   </div>
@@ -180,7 +131,9 @@ const Additem = ()=>{
        <SIgn_img />
    </section>
    <ToastContainer />
-</div></>
+</div>
+</>
 )
 };
 export default Additem;
+
