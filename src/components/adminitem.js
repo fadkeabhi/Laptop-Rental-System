@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Product from "./Product";
+
+import Product2 from "./Product2";
 import Spinner from "./Spinner";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../utils/firebaseConfig";
@@ -24,7 +25,9 @@ const Adminitem = () => {
           ...doc.data(),
         });
       });
+
       console.log(data)
+
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -40,7 +43,7 @@ const Adminitem = () => {
 
       await setItems(data)
       console.log(items)
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +78,9 @@ const Adminitem = () => {
           <div style={{ background: "#f0f0f0", width: "100%", height: "100%" }}>
             <div style={{ width: "75%", margin: "auto", paddingTop: "30px", display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "space-between" }}>
               {items.map((item) => (
-                <Product key={item.id} item={item} onDelete={handleDelete} />
+
+                <Product2 key={item.id} item={item} onDelete={handleDelete} />
+
               ))}
             </div>
           </div>
@@ -90,4 +95,3 @@ const Adminitem = () => {
 };
 
 export default Adminitem;
-
